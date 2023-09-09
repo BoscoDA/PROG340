@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using DungeonCrawler.Utilities;
 
 namespace DungeonCrawler
 {
@@ -47,26 +49,25 @@ namespace DungeonCrawler
         private void GameLoop()
         {
             Random questionPicker = new Random();
-
-            Console.WriteLine($"You venture deep into the cave until you come to a intersection where the cave splits into threee paths. " +
-                $"{Environment.NewLine}In the middle of the intersection on a stone pedestal is a stone tablet with a riddle enscripted on it.");
+            DisplayHud();
+            Printer.Print($"You venture deep into the cave until you come to a intersection where the cave splits into threee paths. {Environment.NewLine}In the middle of the intersection on a stone pedestal is a stone tablet with a riddle enscripted on it. {Environment.NewLine}", ConsoleColor.Green);
             int riddleIndex = questionPicker.Next(riddles.Count);
 
             while (player.GetHealth() > 0 && player.GetCurrentStage() < stages)
             {
-                Console.WriteLine($"{Environment.NewLine}The correct path forward answers this riddle:");
+                Printer.Print($"{Environment.NewLine}The correct path forward answers this riddle:", ConsoleColor.Yellow);
 
                 //Ask riddle
-                Console.WriteLine($"{Environment.NewLine}{riddles[riddleIndex].GetRiddle()}");
+                Printer.Print($"{Environment.NewLine}{riddles[riddleIndex].GetRiddle()}", ConsoleColor.Yellow);
 
                 //Get user answer
-                Console.WriteLine($"{Environment.NewLine}At the mouth of each path there seems to be a symbol etched into the floor...");
+                Printer.Print($"{Environment.NewLine}{Environment.NewLine}At the mouth of each path there seems to be a symbol etched into the floor...", ConsoleColor.Green);
                 foreach(string choice in riddles[riddleIndex].GetAnswers())
                 {
-                    Console.WriteLine(choice);
+                    Printer.Print($"{Environment.NewLine}{choice}", ConsoleColor.Yellow);
                 }
 
-                Console.Write($"{Environment.NewLine}Enter the symbol of the path you would like to follow: ");
+                Printer.Print($"{Environment.NewLine}{Environment.NewLine}Enter the symbol of the path you would like to follow: ", ConsoleColor.Blue);
                 string playerInput = Console.ReadLine().Trim();
 
                 //Check answer
@@ -77,15 +78,15 @@ namespace DungeonCrawler
                 {
                     player.IncrementStage();
                     riddles.Remove(riddles[riddleIndex]);
-                    Console.Clear();
-                    Console.WriteLine($"You venture deeper into the cave until you come to another intersection. You approuch the stone pedestal and start to read it.");
+                    DisplayHud();
+                    Printer.Print($"You venture deeper into the cave until you come to another intersection. You approuch the stone pedestal and start to read it.{Environment.NewLine}", ConsoleColor.Green);
                     riddleIndex = questionPicker.Next(riddles.Count);
                 }
                 else
                 {
                     player.LostLife();
-                    Console.Clear();
-                    Console.WriteLine($"You walk for awhile and seem to come to another intersection, you approuch the stone pedestal and start to read it, but something seems familar about it...");
+                    DisplayHud();
+                    Printer.Print($"You walk for awhile and seem to come to another intersection, you approuch the stone pedestal and start to read it, but something seems familar about it...{Environment.NewLine}", ConsoleColor.Green);
                 }
             }
         }
@@ -93,19 +94,18 @@ namespace DungeonCrawler
         private void Setup()
         {
             //Display menu title
-            Console.WriteLine($"{asciiArt} {Environment.NewLine}");
+            Printer.Print($"{asciiArt} {Environment.NewLine}", ConsoleColor.Green);
 
             //Ask for name
-            Console.Write("Enter your name: ");
+            Printer.Print("Enter your name: ", ConsoleColor.Blue);
 
             //Player enter name
             string playerInput = Console.ReadLine().Trim();
             player = new Player(playerInput, 4);
 
             //Welcome the player
-            Console.WriteLine($"{Environment.NewLine}{player.GetName()}, press any key to venture into the cave...{ Environment.NewLine}");
+            Printer.Print($"{Environment.NewLine}{Environment.NewLine}{player.GetName()}, press any key to venture into the cave...{ Environment.NewLine}", ConsoleColor.Blue);
             Console.ReadKey();
-            Console.Clear();
         }
 
         private void EndGame()
@@ -114,15 +114,28 @@ namespace DungeonCrawler
 
             if ((player.GetHealth() > 0) && (player.GetCurrentStage() == 3))
             {
-                Console.WriteLine($"{Environment.NewLine}Congradulations! You made it through the cave.");
+                Printer.Print($"{Environment.NewLine}Congradulations! You made it through the cave.", ConsoleColor.Green);
             }
             else
             {
-                Console.WriteLine($"{Environment.NewLine}Game Over! The darkness of the cave consumes you.");
+                Printer.Print($"{Environment.NewLine}Game Over! The darkness of the cave consumes you.", ConsoleColor.Red);
             }
 
-            Console.WriteLine($"{Environment.NewLine}Press any key to exit the game...");
+            Printer.Print($"{Environment.NewLine}Press any key to exit the game...", ConsoleColor.Blue);
             Console.ReadKey();
+        }
+
+        private void DisplayHud()
+        {
+            Console.Clear();
+
+            Printer.Print("Lives: ", ConsoleColor.Magenta);
+            for (int i = 1; i <= player.GetHealth(); i++)
+            {
+                Printer.Print("\u2665", ConsoleColor.Red);
+            }
+            Printer.Print("\n", ConsoleColor.Magenta);
+            Printer.Print($"Score: {player.GetCurrentStage()}{Environment.NewLine}{Environment.NewLine}",ConsoleColor.Magenta);
         }
     }
 }
