@@ -8,22 +8,37 @@ namespace DungeonCrawler
 {
     internal class Question
     {
-        public string Riddle { get; set; }
-        public string CorrectAnswer { get; set; }
-        public string WrongAnswer1 { get; set; }
-        public string WrongAnswer2 { get; set; }
+        string Riddle;
+        string CorrectAnswer;
+        List<string> Answers;
 
         public Question(string riddle, string correctAnswer, string wrongAnswer1, string wrongAnswer2)
         {
             Riddle = riddle;
             CorrectAnswer = correctAnswer;
-            WrongAnswer1 = wrongAnswer1;
-            WrongAnswer2 = wrongAnswer2;
+            Answers = new List<string> 
+            { 
+                wrongAnswer1, 
+                correctAnswer, 
+                wrongAnswer2 
+            };
         }
 
-        public bool CheckAnswer()
+        public string GetRiddle()
         {
-            return false;
+            return Riddle;
+        }
+
+        public List<string> GetAnswers()
+        {
+            return Answers;
+        }
+
+        public bool CheckAnswer(string playerInput)
+        {
+            bool isCorrect = playerInput.ToUpper() == CorrectAnswer.ToUpper();
+
+            return isCorrect;
         }
     }
 }

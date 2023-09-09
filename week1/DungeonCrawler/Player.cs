@@ -16,6 +16,7 @@ namespace DungeonCrawler
         {
             this.name = name;
             this.health = health;
+            currentStage = 0;
         }
 
         public string GetName()
@@ -26,6 +27,11 @@ namespace DungeonCrawler
         public int GetCurrentStage()
         {
             return currentStage;
+        }
+
+        public void IncrementStage()
+        {
+            currentStage++;
         }
 
         public void LostLife()
