@@ -10,6 +10,7 @@ namespace DungeonCrawler
     {
         int health;
         string name;
+        int currentStage;
 
         public Player(string name, int health)
         {
@@ -20,6 +21,11 @@ namespace DungeonCrawler
         public string GetName()
         {
             return name;
+        }
+
+        public int GetCurrentStage()
+        {
+            return currentStage;
         }
 
         public void LostLife()
