@@ -114,14 +114,14 @@ namespace DungeonCrawler
 
             if ((player.GetHealth() > 0) && (player.GetCurrentStage() == 3))
             {
-                Printer.Print($"{Environment.NewLine}Congradulations! You made it through the cave.", ConsoleColor.Green);
+                Printer.Print($"Congradulations! You made it through the cave.", ConsoleColor.Green);
             }
             else
             {
-                Printer.Print($"{Environment.NewLine}Game Over! The darkness of the cave consumes you.", ConsoleColor.Red);
+                Printer.Print($"Game Over! The darkness of the cave consumes you.", ConsoleColor.Red);
             }
 
-            Printer.Print($"{Environment.NewLine}Press any key to exit the game...", ConsoleColor.Blue);
+            Printer.Print($"{Environment.NewLine}{Environment.NewLine}Press any key to exit the game...", ConsoleColor.Blue);
             Console.ReadKey();
         }
 
@@ -134,8 +134,7 @@ namespace DungeonCrawler
             {
                 Printer.Print("\u2665", ConsoleColor.Red);
             }
-            Printer.Print("\n", ConsoleColor.Magenta);
-            Printer.Print($"Score: {player.GetCurrentStage()}{Environment.NewLine}{Environment.NewLine}",ConsoleColor.Magenta);
+            Printer.Print($"{Environment.NewLine}Score: {player.GetCurrentStage()}{Environment.NewLine}{Environment.NewLine}",ConsoleColor.Magenta);
         }
     }
 }
