@@ -1,0 +1,15 @@
+C:\workspace\src\PROG340\week1\DungeonCrawler\obj\Debug\net7.0\DungeonCrawler.csproj.AssemblyReference.cache
+C:\workspace\src\PROG340\week1\DungeonCrawler\obj\Debug\net7.0\DungeonCrawler.GeneratedMSBuildEditorConfig.editorconfig
+C:\workspace\src\PROG340\week1\DungeonCrawler\obj\Debug\net7.0\DungeonCrawler.AssemblyInfoInputs.cache
+C:\workspace\src\PROG340\week1\DungeonCrawler\obj\Debug\net7.0\DungeonCrawler.AssemblyInfo.cs
+C:\workspace\src\PROG340\week1\DungeonCrawler\obj\Debug\net7.0\DungeonCrawler.csproj.CoreCompileInputs.cache
+C:\workspace\src\PROG340\week1\DungeonCrawler\bin\Debug\net7.0\DungeonCrawler.exe
+C:\workspace\src\PROG340\week1\DungeonCrawler\bin\Debug\net7.0\DungeonCrawler.deps.json
+C:\workspace\src\PROG340\week1\DungeonCrawler\bin\Debug\net7.0\DungeonCrawler.runtimeconfig.json
+C:\workspace\src\PROG340\week1\DungeonCrawler\bin\Debug\net7.0\DungeonCrawler.dll
+C:\workspace\src\PROG340\week1\DungeonCrawler\bin\Debug\net7.0\DungeonCrawler.pdb
+C:\workspace\src\PROG340\week1\DungeonCrawler\obj\Debug\net7.0\DungeonCrawler.dll
+C:\workspace\src\PROG340\week1\DungeonCrawler\obj\Debug\net7.0\refint\DungeonCrawler.dll
+C:\workspace\src\PROG340\week1\DungeonCrawler\obj\Debug\net7.0\DungeonCrawler.pdb
+C:\workspace\src\PROG340\week1\DungeonCrawler\obj\Debug\net7.0\DungeonCrawler.genruntimeconfig.cache
+C:\workspace\src\PROG340\week1\DungeonCrawler\obj\Debug\net7.0\ref\DungeonCrawler.dll
