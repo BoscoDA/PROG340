@@ -27,8 +27,6 @@ namespace DungeonCrawler
     ███       ███    ███     ███    ███      ███    ███   ███    ███ ███    ███   ███    ███ 
    ▄████▀     ███    █▀      ██████████      ████████▀    ███    █▀   ▀██████▀    ██████████ 
                                                                                              
-
-
 ";
 
             riddles = new List<Question>
@@ -61,7 +59,7 @@ namespace DungeonCrawler
                 Printer.Print($"{Environment.NewLine}{riddles[riddleIndex].GetRiddle()}", ConsoleColor.Yellow);
 
                 //Get user answer
-                Printer.Print($"{Environment.NewLine}{Environment.NewLine}At the mouth of each path there seems to be a symbol etched into the floor...", ConsoleColor.Green);
+                Printer.Print($"{Environment.NewLine}{Environment.NewLine}At the mouth of each path there seems to be a symbol etched into the floor...{Environment.NewLine}", ConsoleColor.Green);
                 foreach(string choice in riddles[riddleIndex].GetAnswers())
                 {
                     Printer.Print($"{Environment.NewLine}{choice}", ConsoleColor.Yellow);
@@ -94,14 +92,29 @@ namespace DungeonCrawler
         private void Setup()
         {
             //Display menu title
-            Printer.Print($"{asciiArt} {Environment.NewLine}", ConsoleColor.Green);
+            Printer.Print($"{asciiArt}", ConsoleColor.Green);
 
-            //Ask for name
-            Printer.Print("Enter your name: ", ConsoleColor.Blue);
+            bool validName = false;
 
-            //Player enter name
-            string playerInput = Console.ReadLine().Trim();
-            player = new Player(playerInput, 4);
+            while(validName == false)
+            {
+                //Ask for name
+                Printer.Print($"{Environment.NewLine}{Environment.NewLine}Enter your name: ", ConsoleColor.Blue);
+
+                //Player enter name
+                string playerInput = Console.ReadLine().Trim();
+                
+                if(String.IsNullOrEmpty(playerInput)) 
+                {
+                   Printer.Print($"{Environment.NewLine}Invalid Name!",ConsoleColor.Red);
+                }
+                else
+                {
+                    player = new Player(playerInput, 4);
+                    validName = true;
+                }
+            }
+            
 
             //Welcome the player
             Printer.Print($"{Environment.NewLine}{Environment.NewLine}{player.GetName()}, press any key to venture into the cave...{ Environment.NewLine}", ConsoleColor.Blue);
@@ -114,14 +127,14 @@ namespace DungeonCrawler
 
             if ((player.GetHealth() > 0) && (player.GetCurrentStage() == 3))
             {
-                Printer.Print($"{Environment.NewLine}Congradulations! You made it through the cave.", ConsoleColor.Green);
+                Printer.Print($"Congradulations! You made it through the cave.", ConsoleColor.Green);
             }
             else
             {
-                Printer.Print($"{Environment.NewLine}Game Over! The darkness of the cave consumes you.", ConsoleColor.Red);
+                Printer.Print($"Game Over! The darkness of the cave consumes you.", ConsoleColor.Red);
             }
 
-            Printer.Print($"{Environment.NewLine}Press any key to exit the game...", ConsoleColor.Blue);
+            Printer.Print($"{Environment.NewLine}{Environment.NewLine}Press any key to exit the game...", ConsoleColor.Blue);
             Console.ReadKey();
         }
 
@@ -134,8 +147,7 @@ namespace DungeonCrawler
             {
                 Printer.Print("\u2665", ConsoleColor.Red);
             }
-            Printer.Print("\n", ConsoleColor.Magenta);
-            Printer.Print($"Score: {player.GetCurrentStage()}{Environment.NewLine}{Environment.NewLine}",ConsoleColor.Magenta);
+            Printer.Print($"{Environment.NewLine}Score: {player.GetCurrentStage()}{Environment.NewLine}{Environment.NewLine}",ConsoleColor.Magenta);
         }
     }
 }
