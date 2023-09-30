@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Three JS Class Demo</title>
+    <link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+    <script type = "module">
+        import * as THREE from './js/three.module.js';
+
+        var width = window.innerWidth - 20;
+        var height = window.innerHeight - 50;
+
+        //Scene
+        var Scene = new THREE.Scene();
+
+        //Camera
+        var myProjectionCamera = new THREE.PerspectiveCamera(50, width/height,.1,1000);
+        myProjectionCamera.position.z = 10;
+        myProjectionCamera.updateProjectionMatrix();
+
+        //Renderer
+        var renderer = new THREE.WebGLRenderer({antialias:true});
+        renderer.setClearColor("#e5e5e5");
+        renderer.setSize(width,height);
+        document.body.appendChild(renderer.domElement);
+
+        //Resize event
+        window.addEventListener('resize', () => {
+            
+            myProjectionCamera.aspect = width/height;
+            myProjectionCamera.updateProjectionMatrix();
+            renderer.setSize(width,height);
+            renderer.render(Scene, myProjectionCamera);
+        })
+
+        //Light
+        var light = new THREE.PointLight(0xFFFFFF,1,500);
+        light.position.set(10,0,25);
+        Scene.add(light);
+
+        //Cube
+        var cube = new THREE.BoxGeometry(1,1,1);
+        var cubeMaterial = new THREE.MeshLambertMaterial({color:0xFFCC00});
+        var cubeMesh = new THREE.Mesh(cube,cubeMaterial);
+        cubeMesh.position.set(0,-2,0);
+        Scene.add(cubeMesh);
+
+        //Sphere
+        var sphere = new THREE.SphereGeometry(0.75,32,32);
+        var sphereMaterial = new THREE.MeshLambertMaterial({color:0x3cb9e1});
+        var sphereMesh = new THREE.Mesh(sphere,sphereMaterial);
+        sphereMesh.position.set(2,0,0)
+        Scene.add(sphereMesh);
+
+        //Cone
+        var cone = new THREE.ConeGeometry(0.5,0.5,64);
+        var coneMaterial = new THREE.MeshLambertMaterial({color:0xFFCFFF});
+        var coneMesh = new THREE.Mesh(cone,coneMaterial);
+        coneMesh.position.set(-2,0,0)
+        Scene.add(coneMesh);
+
+        //Diamond (like The Sims one)
+        //Learned about polyhedron geometry from: 
+        //https://www.tutorialspoint.com/threejs/threejs_geometries.htm
+        //https://threejs.org/docs/#api/en/geometries/PolyhedronGeometry
+        const vertices = [
+            0, 1, 0, // 0: top
+
+            //make a hexagon for 6 faced diamond
+            1,0,0,                                                         // point a
+            (Math.cos(Math.PI/3)),0,(Math.sin(Math.PI/3)),                 // point b 
+            (Math.cos(2 * (Math.PI/3))),0,(Math.sin(2 * (Math.PI/3))),     // point c
+            -1,0,0,                                                        // point d     
+            (Math.cos(4 * (Math.PI/3))),0,(Math.sin(4 * (Math.PI/3))),     // point e 
+            (Math.cos(5 * (Math.PI/3))),0,(Math.sin(5 * (Math.PI/3))),     // point f 
+
+            0, -1, 0 // 7: bottom
+        ]
+        const faces = [
+            1,2,0,
+            2,3,0,
+            3,4,0,
+            4,5,0,
+            5,6,0,
+            6,1,0,
+            1,7,2,
+            2,7,3,
+            3,7,4,
+            4,7,5,
+            5,7,6,
+            6,7,1,
+        ]
+        const diamondGeometry = new THREE.PolyhedronGeometry(vertices, faces, 1, 0)
+        var diamondMaterial = new THREE.MeshLambertMaterial({color:0xa6e329});
+        var diamondMesh = new THREE.Mesh(diamondGeometry,diamondMaterial);
+        diamondMesh.position.set(0,2,0);
+        diamondMesh.scale.set(0.5, 1, 0.5);
+        Scene.add(diamondMesh);
+
+        //Render function and rotate
+        var render = function(){
+            requestAnimationFrame(render);
+            cubeMesh.rotation.x += 0.01;
+            cubeMesh.rotation.y += 0.01;
+            cubeMesh.rotation.z += 0.01;
+            sphereMesh.rotation.x += 0.01;
+            sphereMesh.rotation.y += 0.01;
+            sphereMesh.rotation.z += 0.01;
+            coneMesh.rotation.x += 0.01;
+            coneMesh.rotation.y += 0.01;
+            coneMesh.rotation.z += 0.01;
+            diamondMesh.rotation.x += 0.005;
+            diamondMesh.rotation.y += 0.005;
+            diamondMesh.rotation.z += 0.005;
+            renderer.render(Scene, myProjectionCamera);
+        }
+
+        render();
+    </script>
+</body>
+</html>
