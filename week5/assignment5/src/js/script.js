@@ -91,11 +91,50 @@ coneGui.addColor(condeGuiOptions, 'ConeColor').onChange(function(e){coneMesh.mat
 coneGui.add(condeGuiOptions, 'wireframe').onChange(function(e){coneMesh.material.wireframe = e;});
 coneGui.add(condeGuiOptions, 'speed', 0, 1);
 
+const diamondGui = new dat.GUI();
+const diamondGuiOptions = {
+    DiamondColor: diamondMesh.material.color.getHex(),
+    wireframe: true,
+    xSpeed: 10,
+    ySpeed: 10,
+    zSpeed: 10,
+    scale: 4
+};
+
+diamondGui.addColor(diamondGuiOptions, 'DiamondColor').onChange(function(e){diamondMesh.material.color.set(e);});
+diamondGui.add(diamondGuiOptions, 'scale', 0, 10).onChange(function(e){diamondMesh.scale.set(e/2, e, e/2);});
+diamondGui.add(diamondGuiOptions, 'xSpeed', 0, 10);
+diamondGui.add(diamondGuiOptions, 'ySpeed', 0, 10);
+diamondGui.add(diamondGuiOptions, 'zSpeed', 0, 10);
+
 function animate(time)
 {
-    diamondMesh.rotation.x = time / 1000;
+    if(diamondGuiOptions.xSpeed > 0)
+    {
+        diamondMesh.rotation.x = time / (diamondGuiOptions.xSpeed * 100);
+    }
+    else
+    {
+        diamondMesh.rotation.x = 0;
+    }
 
-    diamondMesh.rotation.y = time / 1000;
+    if(diamondGuiOptions.ySpeed > 0)
+    {
+        diamondMesh.rotation.y = time /(diamondGuiOptions.ySpeed * 100);
+    }
+    else
+    {
+        diamondMesh.rotation.y = 0;
+    }
+
+    if(diamondGuiOptions.zSpeed > 0)
+    {
+        diamondMesh.rotation.z = time /(diamondGuiOptions.zSpeed * 100);
+    }
+    else
+    {
+        diamondMesh.rotation.z = 0;
+    }
 
     angle += condeGuiOptions.speed;
     coneMesh.position.y = 10*Math.abs(Math.sin(angle));
