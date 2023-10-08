@@ -706,6 +706,7 @@ var diamondMaterial = new _three.MeshLambertMaterial({
 var diamondMesh = new _three.Mesh(diamondGeometry, diamondMaterial);
 diamondMesh.position.set(0, 5, 0);
 diamondMesh.scale.set(2, 4, 2);
+diamondMesh.castShadow = true;
 scene.add(diamondMesh);
 //Plane
 const planeGeo = new _three.PlaneGeometry(30, 30);
