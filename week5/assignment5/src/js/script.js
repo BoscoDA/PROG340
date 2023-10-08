@@ -1,5 +1,6 @@
 import * as THREE from "three";
 import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls.js'
+import * as dat from 'dat.gui';
 
 var height = window.innerHeight;
 var width = window.innerWidth;
@@ -77,11 +78,27 @@ var coneMesh = new THREE.Mesh(cone,coneMaterial);
 coneMesh.position.set(-10,10,0)
 scene.add(coneMesh);
 
+const coneGui = new dat.GUI();
+var angle = 0;
+const condeGuiOptions = {
+    ConeColor: coneMesh.material.color.getHex(),
+    wireframe: true,
+    speed: .02,
+    angle: .02
+};
+
+coneGui.addColor(condeGuiOptions, 'ConeColor').onChange(function(e){coneMesh.material.color.set(e);});
+coneGui.add(condeGuiOptions, 'wireframe').onChange(function(e){coneMesh.material.wireframe = e;});
+coneGui.add(condeGuiOptions, 'speed', 0, 1);
+
 function animate(time)
 {
     diamondMesh.rotation.x = time / 1000;
 
     diamondMesh.rotation.y = time / 1000;
+
+    angle += condeGuiOptions.speed;
+    coneMesh.position.y = 10*Math.abs(Math.sin(angle));
 
     renderer.render(scene, camera);
 }
