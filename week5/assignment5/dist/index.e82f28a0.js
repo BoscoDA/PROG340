@@ -574,9 +574,26 @@ function hmrAccept(bundle /*: ParcelRequire */ , id /*: string */ ) {
 }
 
 },{}],"dV6cC":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 var _three = require("three");
 var _orbitControlsJs = require("three/examples/jsm/controls/OrbitControls.js");
 var _datGui = require("dat.gui");
+var _topJpg = require("../img/top.jpg");
+var _topJpgDefault = parcelHelpers.interopDefault(_topJpg);
+var _botJpg = require("../img/bot.jpg");
+var _botJpgDefault = parcelHelpers.interopDefault(_botJpg);
+var _side1Jpg = require("../img/side1.jpg");
+var _side1JpgDefault = parcelHelpers.interopDefault(_side1Jpg);
+var _side2Jpg = require("../img/side2.jpg");
+var _side2JpgDefault = parcelHelpers.interopDefault(_side2Jpg);
+var _side3Jpg = require("../img/side3.jpg");
+var _side3JpgDefault = parcelHelpers.interopDefault(_side3Jpg);
+var _side4Jpg = require("../img/side4.jpg");
+var _side4JpgDefault = parcelHelpers.interopDefault(_side4Jpg);
+//image open sources from: 
+//https://pixabay.com/photos/milky-way-stars-night-sky-2695569/
+//https://pixabay.com/photos/milky-way-nebula-galaxy-stars-74005/
+//https://pixabay.com/illustrations/universe-hole-space-fog-galaxy-4027609/
 var height = window.innerHeight;
 var width = window.innerWidth;
 const renderer = new _three.WebGLRenderer();
@@ -603,6 +620,17 @@ scene.add(gridHelper);
 const spotLightHelper = new _three.SpotLightHelper(spotLight);
 scene.add(spotLightHelper);
 orbit.update();
+//Backround Texture
+const cubeTextureLoader = new _three.CubeTextureLoader();
+const cubeTexture = cubeTextureLoader.load([
+    (0, _side1JpgDefault.default),
+    (0, _side2JpgDefault.default),
+    (0, _topJpgDefault.default),
+    (0, _botJpgDefault.default),
+    (0, _side3JpgDefault.default),
+    (0, _side4JpgDefault.default)
+]);
+scene.background = cubeTexture;
 //Geo
 //Diamond
 //Code taken from my assignment 4 in repo
@@ -700,6 +728,7 @@ var coneMesh = new _three.Mesh(cone, coneMaterial);
 coneMesh.position.set(-10, 10, 0);
 coneMesh.castShadow = true;
 scene.add(coneMesh);
+//GUI
 const coneGui = new _datGui.GUI();
 var angle = 0;
 const condeGuiOptions = {
@@ -759,7 +788,7 @@ function animate(time) {
 }
 renderer.setAnimationLoop(animate);
 
-},{"three":"ktPTu","three/examples/jsm/controls/OrbitControls.js":"7mqRv","dat.gui":"k3xQk"}],"ktPTu":[function(require,module,exports) {
+},{"three":"ktPTu","three/examples/jsm/controls/OrbitControls.js":"7mqRv","dat.gui":"k3xQk","../img/top.jpg":"eFIf6","../img/bot.jpg":"5ZPdk","../img/side1.jpg":"cDRlN","../img/side2.jpg":"1HN2f","../img/side3.jpg":"lBMtw","../img/side4.jpg":"49ain","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"ktPTu":[function(require,module,exports) {
 /**
  * @license
  * Copyright 2010-2023 Three.js Authors
@@ -33837,6 +33866,59 @@ var index = {
 };
 exports.default = index;
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}]},["4tgfT","dV6cC"], "dV6cC", "parcelRequire6925")
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"eFIf6":[function(require,module,exports) {
+module.exports = require("8a52203371f1fd58").getBundleURL("2MSMO") + "top.111f501f.jpg" + "?" + Date.now();
+
+},{"8a52203371f1fd58":"lgJ39"}],"lgJ39":[function(require,module,exports) {
+"use strict";
+var bundleURL = {};
+function getBundleURLCached(id) {
+    var value = bundleURL[id];
+    if (!value) {
+        value = getBundleURL();
+        bundleURL[id] = value;
+    }
+    return value;
+}
+function getBundleURL() {
+    try {
+        throw new Error();
+    } catch (err) {
+        var matches = ("" + err.stack).match(/(https?|file|ftp|(chrome|moz|safari-web)-extension):\/\/[^)\n]+/g);
+        if (matches) // The first two stack frames will be this function and getBundleURLCached.
+        // Use the 3rd one, which will be a runtime in the original bundle.
+        return getBaseURL(matches[2]);
+    }
+    return "/";
+}
+function getBaseURL(url) {
+    return ("" + url).replace(/^((?:https?|file|ftp|(chrome|moz|safari-web)-extension):\/\/.+)\/[^/]+$/, "$1") + "/";
+}
+// TODO: Replace uses with `new URL(url).origin` when ie11 is no longer supported.
+function getOrigin(url) {
+    var matches = ("" + url).match(/(https?|file|ftp|(chrome|moz|safari-web)-extension):\/\/[^/]+/);
+    if (!matches) throw new Error("Origin not found");
+    return matches[0];
+}
+exports.getBundleURL = getBundleURLCached;
+exports.getBaseURL = getBaseURL;
+exports.getOrigin = getOrigin;
+
+},{}],"5ZPdk":[function(require,module,exports) {
+module.exports = require("ef9b259205789f7f").getBundleURL("2MSMO") + "bot.8f9f2519.jpg" + "?" + Date.now();
+
+},{"ef9b259205789f7f":"lgJ39"}],"cDRlN":[function(require,module,exports) {
+module.exports = require("8a8318b6b43e7696").getBundleURL("2MSMO") + "side1.5df036aa.jpg" + "?" + Date.now();
+
+},{"8a8318b6b43e7696":"lgJ39"}],"1HN2f":[function(require,module,exports) {
+module.exports = require("280cdbcd676c39d9").getBundleURL("2MSMO") + "side2.b981022d.jpg" + "?" + Date.now();
+
+},{"280cdbcd676c39d9":"lgJ39"}],"lBMtw":[function(require,module,exports) {
+module.exports = require("c1474af9c1c989ca").getBundleURL("2MSMO") + "side3.3aeffeae.jpg" + "?" + Date.now();
+
+},{"c1474af9c1c989ca":"lgJ39"}],"49ain":[function(require,module,exports) {
+module.exports = require("dd29f86a9f79632e").getBundleURL("2MSMO") + "side4.b73cb27f.jpg" + "?" + Date.now();
+
+},{"dd29f86a9f79632e":"lgJ39"}]},["4tgfT","dV6cC"], "dV6cC", "parcelRequire6925")
 
 //# sourceMappingURL=index.e82f28a0.js.map

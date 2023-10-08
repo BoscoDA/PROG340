@@ -1,6 +1,16 @@
 import * as THREE from "three";
 import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls.js'
 import * as dat from 'dat.gui';
+import topImage from '../img/top.jpg';
+import botImage from '../img/bot.jpg';
+import side1 from '../img/side1.jpg';
+import side2 from '../img/side2.jpg';
+import side3 from '../img/side3.jpg';
+import side4 from '../img/side4.jpg';
+//image open sources from: 
+//https://pixabay.com/photos/milky-way-stars-night-sky-2695569/
+//https://pixabay.com/photos/milky-way-nebula-galaxy-stars-74005/
+//https://pixabay.com/illustrations/universe-hole-space-fog-galaxy-4027609/
 
 var height = window.innerHeight;
 var width = window.innerWidth;
@@ -33,6 +43,19 @@ const spotLightHelper = new THREE.SpotLightHelper(spotLight);
 scene.add(spotLightHelper);
 
 orbit.update();
+
+//Backround Texture
+const cubeTextureLoader = new THREE.CubeTextureLoader();
+const cubeTexture = cubeTextureLoader.load([
+    side1,
+    side2,
+    topImage,
+    botImage,
+    side3,
+    side4,
+])
+scene.background = cubeTexture;
+
 //Geo
 
 //Diamond
@@ -88,6 +111,7 @@ coneMesh.position.set(-10,10,0);
 coneMesh.castShadow = true;
 scene.add(coneMesh);
 
+//GUI
 const coneGui = new dat.GUI();
 var angle = 0;
 const condeGuiOptions = {
