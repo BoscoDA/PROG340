@@ -581,6 +581,7 @@ var height = window.innerHeight;
 var width = window.innerWidth;
 const renderer = new _three.WebGLRenderer();
 renderer.setSize(width, height);
+renderer.shadowMap.enabled = true;
 document.body.appendChild(renderer.domElement);
 const scene = new _three.Scene();
 const camera = new _three.PerspectiveCamera(45, width / height, 0.1, 1000);
@@ -589,11 +590,18 @@ const orbit = new (0, _orbitControlsJs.OrbitControls)(camera, renderer.domElemen
 //Lighting
 const ambientLight = new _three.AmbientLight(0x334455);
 scene.add(ambientLight);
+const spotLight = new _three.SpotLight(0xffffff);
+spotLight.position.set(-20, 20, 0);
+spotLight.decay = 0;
+spotLight.castShadow = true;
+scene.add(spotLight);
 //Axis Helpers
 const axesHelper = new _three.AxesHelper(3);
 scene.add(axesHelper);
 const gridHelper = new _three.GridHelper(30);
 scene.add(gridHelper);
+const spotLightHelper = new _three.SpotLightHelper(spotLight);
+scene.add(spotLightHelper);
 orbit.update();
 //Geo
 //Diamond
@@ -678,6 +686,7 @@ const planeMat = new _three.MeshLambertMaterial({
     side: _three.DoubleSide
 });
 const plane = new _three.Mesh(planeGeo, planeMat);
+plane.receiveShadow = true;
 scene.add(plane);
 plane.rotation.x = -0.5 * Math.PI;
 //Cone
@@ -689,6 +698,7 @@ var coneMaterial = new _three.MeshLambertMaterial({
 });
 var coneMesh = new _three.Mesh(cone, coneMaterial);
 coneMesh.position.set(-10, 10, 0);
+coneMesh.castShadow = true;
 scene.add(coneMesh);
 const coneGui = new _datGui.GUI();
 var angle = 0;
@@ -723,6 +733,15 @@ diamondGui.add(diamondGuiOptions, "scale", 0, 10).onChange(function(e) {
 diamondGui.add(diamondGuiOptions, "xSpeed", 0, 10);
 diamondGui.add(diamondGuiOptions, "ySpeed", 0, 10);
 diamondGui.add(diamondGuiOptions, "zSpeed", 0, 10);
+const spotlightGui = new _datGui.GUI();
+const spotlightGuiOptions = {
+    angle: 0.5,
+    penumbra: 0.5,
+    intensity: 1
+};
+spotlightGui.add(spotlightGuiOptions, "angle", 0, 1);
+spotlightGui.add(spotlightGuiOptions, "penumbra", 0, 1);
+spotlightGui.add(spotlightGuiOptions, "intensity", 0, 10);
 function animate(time) {
     if (diamondGuiOptions.xSpeed > 0) diamondMesh.rotation.x = time / (diamondGuiOptions.xSpeed * 100);
     else diamondMesh.rotation.x = 0;
@@ -732,6 +751,10 @@ function animate(time) {
     else diamondMesh.rotation.z = 0;
     angle += condeGuiOptions.speed;
     coneMesh.position.y = 10 * Math.abs(Math.sin(angle));
+    spotLight.angle = spotlightGuiOptions.angle;
+    spotLight.penumbra = spotlightGuiOptions.penumbra;
+    spotLight.intensity = spotlightGuiOptions.intensity;
+    spotLightHelper.update();
     renderer.render(scene, camera);
 }
 renderer.setAnimationLoop(animate);

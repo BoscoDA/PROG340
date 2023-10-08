@@ -7,6 +7,7 @@ var width = window.innerWidth;
 
 const renderer = new THREE.WebGLRenderer();
 renderer.setSize(width,height);
+renderer.shadowMap.enabled = true;
 document.body.appendChild(renderer.domElement);
 
 const scene = new THREE.Scene();
@@ -17,12 +18,19 @@ const orbit = new OrbitControls(camera, renderer.domElement);
 //Lighting
 const ambientLight = new THREE.AmbientLight(0x334455);
 scene.add(ambientLight);
+const spotLight = new THREE.SpotLight(0xffffff);
+spotLight.position.set(-20,20,0);
+spotLight.decay = 0;
+spotLight.castShadow = true;
+scene.add(spotLight);
 
 //Axis Helpers
 const axesHelper = new THREE.AxesHelper(3);
 scene.add(axesHelper);
 const gridHelper = new THREE.GridHelper(30);
 scene.add(gridHelper);
+const spotLightHelper = new THREE.SpotLightHelper(spotLight);
+scene.add(spotLightHelper);
 
 orbit.update();
 //Geo
@@ -67,6 +75,7 @@ scene.add(diamondMesh);
 const planeGeo = new THREE.PlaneGeometry(30,30);
 const planeMat = new THREE.MeshLambertMaterial({color: 0xF0F0F0, side:THREE.DoubleSide});
 const plane = new THREE.Mesh(planeGeo, planeMat);
+plane.receiveShadow = true;
 scene.add(plane);
 plane.rotation.x = -.5 * Math.PI;
 
@@ -75,7 +84,8 @@ plane.rotation.x = -.5 * Math.PI;
 var cone = new THREE.ConeGeometry(4,5,64);
 var coneMaterial = new THREE.MeshLambertMaterial({color:0xFFCFFF, wireframe:true});
 var coneMesh = new THREE.Mesh(cone,coneMaterial);
-coneMesh.position.set(-10,10,0)
+coneMesh.position.set(-10,10,0);
+coneMesh.castShadow = true;
 scene.add(coneMesh);
 
 const coneGui = new dat.GUI();
@@ -106,6 +116,17 @@ diamondGui.add(diamondGuiOptions, 'scale', 0, 10).onChange(function(e){diamondMe
 diamondGui.add(diamondGuiOptions, 'xSpeed', 0, 10);
 diamondGui.add(diamondGuiOptions, 'ySpeed', 0, 10);
 diamondGui.add(diamondGuiOptions, 'zSpeed', 0, 10);
+
+const spotlightGui = new dat.GUI();
+const spotlightGuiOptions = {
+    angle: 0.5,
+    penumbra: 0.5,
+    intensity: 1
+}
+
+spotlightGui.add(spotlightGuiOptions, 'angle', 0, 1);
+spotlightGui.add(spotlightGuiOptions, 'penumbra', 0, 1);
+spotlightGui.add(spotlightGuiOptions, 'intensity', 0, 10);
 
 function animate(time)
 {
@@ -138,6 +159,11 @@ function animate(time)
 
     angle += condeGuiOptions.speed;
     coneMesh.position.y = 10*Math.abs(Math.sin(angle));
+
+    spotLight.angle = spotlightGuiOptions.angle;
+    spotLight.penumbra = spotlightGuiOptions.penumbra;
+    spotLight.intensity = spotlightGuiOptions.intensity;
+    spotLightHelper.update();
 
     renderer.render(scene, camera);
 }
