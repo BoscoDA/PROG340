@@ -157,7 +157,7 @@ function animate(time) {
 
     rayCaster.setFromCamera(mousePos, camera);
     const intersectObj = rayCaster.intersectObjects(scene.children);
-    //console.log(intersectObj);
+    console.log(intersectObj);
 
     for(var i = 0; i < intersectObj.length; i++)
     {
