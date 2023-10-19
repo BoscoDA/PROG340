@@ -142,7 +142,7 @@
       this[globalName] = mainExports;
     }
   }
-})({"4tgfT":[function(require,module,exports) {
+})({"4FFYD":[function(require,module,exports) {
 var global = arguments[3];
 var HMR_HOST = null;
 var HMR_PORT = null;
@@ -227,9 +227,15 @@ if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== "undefined") {
     var hostname = getHostname();
     var port = getPort();
     var protocol = HMR_SECURE || location.protocol == "https:" && !/localhost|127.0.0.1|0.0.0.0/.test(hostname) ? "wss" : "ws";
-    var ws = new WebSocket(protocol + "://" + hostname + (port ? ":" + port : "") + "/");
+    var ws;
+    try {
+        ws = new WebSocket(protocol + "://" + hostname + (port ? ":" + port : "") + "/");
+    } catch (err) {
+        if (err.message) console.error(err.message);
+        ws = {};
+    }
     // Web extension context
-    var extCtx = typeof chrome === "undefined" ? typeof browser === "undefined" ? null : browser : chrome;
+    var extCtx = typeof browser === "undefined" ? typeof chrome === "undefined" ? null : chrome : browser;
     // Safari doesn't support sourceURL in error stacks.
     // eval may also be disabled via CSP, so do a quick check.
     var supportsSourceURL = false;
@@ -293,7 +299,7 @@ if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== "undefined") {
         }
     };
     ws.onerror = function(e) {
-        console.error(e.message);
+        if (e.message) console.error(e.message);
     };
     ws.onclose = function() {
         console.warn("[parcel] \uD83D\uDEA8 Connection to the HMR server was lost");
@@ -303,7 +309,7 @@ function removeErrorOverlay() {
     var overlay = document.getElementById(OVERLAY_ID);
     if (overlay) {
         overlay.remove();
-        console.log("[parcel] ✨ Error resolved");
+        console.log("[parcel] \u2728 Error resolved");
     }
 }
 function createErrorOverlay(diagnostics) {
@@ -319,13 +325,13 @@ ${frame.code}`;
         errorHTML += `
       <div>
         <div style="font-size: 18px; font-weight: bold; margin-top: 20px;">
-          🚨 ${diagnostic.message}
+          \u{1F6A8} ${diagnostic.message}
         </div>
         <pre>${stack}</pre>
         <div>
           ${diagnostic.hints.map((hint)=>"<div>\uD83D\uDCA1 " + hint + "</div>").join("")}
         </div>
-        ${diagnostic.documentation ? `<div>📝 <a style="color: violet" href="${diagnostic.documentation}" target="_blank">Learn more</a></div>` : ""}
+        ${diagnostic.documentation ? `<div>\u{1F4DD} <a style="color: violet" href="${diagnostic.documentation}" target="_blank">Learn more</a></div>` : ""}
       </div>
     `;
     }
@@ -421,15 +427,10 @@ async function hmrApplyUpdates(assets) {
             let promises = assets.map((asset)=>{
                 var _hmrDownload;
                 return (_hmrDownload = hmrDownload(asset)) === null || _hmrDownload === void 0 ? void 0 : _hmrDownload.catch((err)=>{
-                    // Web extension bugfix for Chromium
-                    // https://bugs.chromium.org/p/chromium/issues/detail?id=1255412#c12
-                    if (extCtx && extCtx.runtime && extCtx.runtime.getManifest().manifest_version == 3) {
-                        if (typeof ServiceWorkerGlobalScope != "undefined" && global instanceof ServiceWorkerGlobalScope) {
-                            extCtx.runtime.reload();
-                            return;
-                        }
-                        asset.url = extCtx.runtime.getURL("/__parcel_hmr_proxy__?url=" + encodeURIComponent(asset.url + "?t=" + Date.now()));
-                        return hmrDownload(asset);
+                    // Web extension fix
+                    if (extCtx && extCtx.runtime && extCtx.runtime.getManifest().manifest_version == 3 && typeof ServiceWorkerGlobalScope != "undefined" && global instanceof ServiceWorkerGlobalScope) {
+                        extCtx.runtime.reload();
+                        return;
                     }
                     throw err;
                 });
@@ -574,63 +575,153 @@ function hmrAccept(bundle /*: ParcelRequire */ , id /*: string */ ) {
 }
 
 },{}],"dV6cC":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 var _three = require("three");
 var _orbitControlsJs = require("three/examples/jsm/controls/OrbitControls.js");
 var _datGui = require("dat.gui");
+var _topJpg = require("../img/top.jpg");
+var _topJpgDefault = parcelHelpers.interopDefault(_topJpg);
+var _botJpg = require("../img/bot.jpg");
+var _botJpgDefault = parcelHelpers.interopDefault(_botJpg);
+var _side1Jpg = require("../img/side1.jpg");
+var _side1JpgDefault = parcelHelpers.interopDefault(_side1Jpg);
+var _side2Jpg = require("../img/side2.jpg");
+var _side2JpgDefault = parcelHelpers.interopDefault(_side2Jpg);
+var _side3Jpg = require("../img/side3.jpg");
+var _side3JpgDefault = parcelHelpers.interopDefault(_side3Jpg);
+var _side4Jpg = require("../img/side4.jpg");
+var _side4JpgDefault = parcelHelpers.interopDefault(_side4Jpg);
+var _diceOneJpg = require("../img/dice_one.jpg");
+var _diceOneJpgDefault = parcelHelpers.interopDefault(_diceOneJpg);
+var _diceTwoJpg = require("../img/dice_two.jpg");
+var _diceTwoJpgDefault = parcelHelpers.interopDefault(_diceTwoJpg);
+var _diceThreeJpg = require("../img/dice_three.jpg");
+var _diceThreeJpgDefault = parcelHelpers.interopDefault(_diceThreeJpg);
+var _dice4Jpg = require("../img/dice_4.jpg");
+var _dice4JpgDefault = parcelHelpers.interopDefault(_dice4Jpg);
+var _diceFiveJpg = require("../img/dice_five.jpg");
+var _diceFiveJpgDefault = parcelHelpers.interopDefault(_diceFiveJpg);
+var _diceSixJpg = require("../img/dice_six.jpg");
+var _diceSixJpgDefault = parcelHelpers.interopDefault(_diceSixJpg);
+//import background from '../img/background.jpg'; // Credit: <a href="https://www.freepik.com/free-photo/abstract-flowing-neon-wave-background_15474089.htm#query=background&position=26&from_view=keyword">Image by rawpixel.com</a> on Freepik
+//import stars from '../img/stars.jpg'; //https://www.pxfuel.com/en/free-photo-obmtg/download
 var height = window.innerHeight;
 var width = window.innerWidth;
 const renderer = new _three.WebGLRenderer();
+renderer.shadowMap.enabled = true;
 renderer.setSize(width, height);
-renderer.shadowMap = true;
 document.body.appendChild(renderer.domElement);
 const scene = new _three.Scene();
+//renderer.setClearColor(0x334455);
+//const textureLoader = new THREE.TextureLoader();
+//scene.background = textureLoader.load(topImage);
+//Backround Texture
+const cubeTextureLoader = new _three.CubeTextureLoader();
+const cubeTexture = cubeTextureLoader.load([
+    (0, _side1JpgDefault.default),
+    (0, _side2JpgDefault.default),
+    (0, _topJpgDefault.default),
+    (0, _botJpgDefault.default),
+    (0, _side3JpgDefault.default),
+    (0, _side4JpgDefault.default)
+]);
+scene.background = cubeTexture;
 const camera = new _three.PerspectiveCamera(45, width / height, 0.1, 1000);
 const orbit = new (0, _orbitControlsJs.OrbitControls)(camera, renderer.domElement);
-const ambientLight = new _three.AmbientLight(0x334455);
-scene.add(ambientLight);
-const directionalLight = new _three.DirectionalLight(0xffffff, 0.8);
-directionalLight.position.set(-20, 20, 0);
-directionalLight.castShadow = true;
-scene.add(directionalLight);
-const axesHelper = new _three.AxesHelper(3);
+const axesHelper = new _three.AxesHelper(5);
 scene.add(axesHelper);
 const gridHelper = new _three.GridHelper(30);
 scene.add(gridHelper);
-const directionalLightHelper = new _three.DirectionalLightHelper(directionalLight);
-scene.add(directionalLightHelper);
 camera.position.set(-10, 30, 30);
 orbit.update();
+//green box
 const boxGeo = new _three.BoxGeometry();
 const boxMat = new _three.MeshBasicMaterial({
     color: 0x00FF00
 });
 const box = new _three.Mesh(boxGeo, boxMat);
 scene.add(box);
+//new box
+const textureLoader = new _three.TextureLoader();
+const box2Geo = new _three.BoxGeometry(4, 4, 4);
+//const box2Mat = new THREE.MeshBasicMaterial({color: 0x00FF00, map: textureLoader.load(topImage) });
+const box2Materials = [
+    new _three.MeshBasicMaterial({
+        map: textureLoader.load((0, _diceOneJpgDefault.default))
+    }),
+    new _three.MeshBasicMaterial({
+        map: textureLoader.load((0, _diceTwoJpgDefault.default))
+    }),
+    new _three.MeshBasicMaterial({
+        map: textureLoader.load((0, _diceThreeJpgDefault.default))
+    }),
+    new _three.MeshBasicMaterial({
+        map: textureLoader.load((0, _dice4JpgDefault.default))
+    }),
+    new _three.MeshBasicMaterial({
+        map: textureLoader.load((0, _diceFiveJpgDefault.default))
+    }),
+    new _three.MeshStandardMaterial({
+        map: textureLoader.load((0, _diceSixJpgDefault.default))
+    })
+];
+const box2 = new _three.Mesh(box2Geo, box2Materials);
+box2.position.set(10, 5, 0);
+box2.name = "boxname";
+scene.add(box2);
+//Floor
 const planeGeo = new _three.PlaneGeometry(30, 30);
 const planeMat = new _three.MeshStandardMaterial({
     color: 0xFFFFFF,
     side: _three.DoubleSide
 });
 const plane = new _three.Mesh(planeGeo, planeMat);
-plane.receiveShadow = true;
 scene.add(plane);
 plane.rotation.x = -0.5 * Math.PI;
-const sphereGeo = new (0, _three.SphereGeometry)(4, 40, 40);
+plane.receiveShadow = true;
+//Sphere
+const sphereGeo = new _three.SphereGeometry(4, 40, 40);
 const sphereMat = new _three.MeshStandardMaterial({
     color: 0x0000FF,
-    wireframe: true
+    wireframe: false
 });
 const sphere = new _three.Mesh(sphereGeo, sphereMat);
-sphere.castShadow = true;
 scene.add(sphere);
 sphere.position.set(-10, 10, 0);
+sphere.castShadow = true;
+//Ambient
+const ambientLight = new _three.AmbientLight(0x333333);
+scene.add(ambientLight);
+//Spot
+const spotLight = new _three.SpotLight(0xFFFFFF);
+scene.add(spotLight);
+spotLight.position.set(-20, 20, 0);
+spotLight.castShadow = true;
+spotLight.decay = 0;
+const spotLightHelper = new _three.SpotLightHelper(spotLight);
+scene.add(spotLightHelper);
+//Directional Light
+// const dlight = new THREE.DirectionalLight(0xffffff);
+// dlight.position.set(-20,20,0);
+// dlight.castShadow = true;
+// scene.add(dlight);
+// dlight.shadow.camera.bottom = -12;
+//scene.fog = new THREE.Fog(0xFFFFFF,0,200);
+scene.fog = new _three.FogExp2(0xFFFFFF, .01);
+const mousePos = new _three.Vector2();
+window.addEventListener("mousemove", function(e) {
+    mousePos.x = e.clientX / width * 2 - 1;
+    mousePos.y = e.clientY / height * 2 + 1;
+});
+const rayCaster = new _three.Raycaster();
 const gui = new _datGui.GUI();
-var angle = 0;
 const guiOptions = {
     SphereColor: "#0000FF",
-    wireframe: true,
-    speed: .02,
-    angle: .02
+    wireframe: false,
+    speed: 0.01,
+    angle: 0.2,
+    penumbra: 0,
+    intensity: 1
 };
 gui.addColor(guiOptions, "SphereColor").onChange(function(e) {
     sphere.material.color.set(e);
@@ -638,18 +729,35 @@ gui.addColor(guiOptions, "SphereColor").onChange(function(e) {
 gui.add(guiOptions, "wireframe").onChange(function(e) {
     sphere.material.wireframe = e;
 });
-//gui.add(guiOptions, 'angle', 0, 1)
-gui.add(guiOptions, "speed", 0, 1);
+gui.add(guiOptions, "speed", 0, .1);
+gui.add(guiOptions, "angle", 0, 1);
+gui.add(guiOptions, "penumbra", 0, 1);
+gui.add(guiOptions, "intensity", 0, 1);
+var bounceAngle = 0;
 function animate(time) {
     box.rotation.x = time / 1000;
     box.rotation.y = time / 1000;
-    angle += guiOptions.speed;
-    sphere.position.y = 10 * Math.abs(Math.sin(angle));
+    bounceAngle += guiOptions.speed;
+    sphere.position.y = 10 * Math.abs(Math.sin(bounceAngle));
+    spotLight.angle = guiOptions.angle;
+    spotLight.penumbra = guiOptions.penumbra;
+    spotLight.intensity = guiOptions.intensity;
+    spotLightHelper.update();
+    rayCaster.setFromCamera(mousePos.normalize(), camera);
+    const intersectObj = rayCaster.intersectObjects(scene.children);
+    console.log(rayCaster.ray);
+    for(var i = 0; i < intersectObj.length; i++){
+        if (intersectObj[i].object.id === sphere.id) intersectObj[i].object.material.color.set(0xFF0000);
+        if (intersectObj[i].object.name === box2.name) {
+            intersectObj[i].object.rotation.x = time / 1000;
+            intersectObj[i].object.rotation.y = time / 1000;
+        }
+    }
     renderer.render(scene, camera);
 }
 renderer.setAnimationLoop(animate);
 
-},{"three":"ktPTu","three/examples/jsm/controls/OrbitControls.js":"7mqRv","dat.gui":"k3xQk"}],"ktPTu":[function(require,module,exports) {
+},{"three":"ktPTu","three/examples/jsm/controls/OrbitControls.js":"7mqRv","dat.gui":"k3xQk","../img/top.jpg":"eFIf6","../img/bot.jpg":"5ZPdk","../img/side1.jpg":"cDRlN","../img/side2.jpg":"1HN2f","../img/side3.jpg":"lBMtw","../img/side4.jpg":"49ain","../img/dice_one.jpg":"eqa9Y","../img/dice_two.jpg":"5n6ky","../img/dice_three.jpg":"kPYrI","../img/dice_4.jpg":"4Etkx","../img/dice_five.jpg":"4D2qV","../img/dice_six.jpg":"757Hp","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"ktPTu":[function(require,module,exports) {
 /**
  * @license
  * Copyright 2010-2023 Three.js Authors
@@ -33727,6 +33835,77 @@ var index = {
 };
 exports.default = index;
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}]},["4tgfT","dV6cC"], "dV6cC", "parcelRequire6330")
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"eFIf6":[function(require,module,exports) {
+module.exports = require("8a52203371f1fd58").getBundleURL("2MSMO") + "top.111f501f.jpg" + "?" + Date.now();
+
+},{"8a52203371f1fd58":"lgJ39"}],"lgJ39":[function(require,module,exports) {
+"use strict";
+var bundleURL = {};
+function getBundleURLCached(id) {
+    var value = bundleURL[id];
+    if (!value) {
+        value = getBundleURL();
+        bundleURL[id] = value;
+    }
+    return value;
+}
+function getBundleURL() {
+    try {
+        throw new Error();
+    } catch (err) {
+        var matches = ("" + err.stack).match(/(https?|file|ftp|(chrome|moz|safari-web)-extension):\/\/[^)\n]+/g);
+        if (matches) // The first two stack frames will be this function and getBundleURLCached.
+        // Use the 3rd one, which will be a runtime in the original bundle.
+        return getBaseURL(matches[2]);
+    }
+    return "/";
+}
+function getBaseURL(url) {
+    return ("" + url).replace(/^((?:https?|file|ftp|(chrome|moz|safari-web)-extension):\/\/.+)\/[^/]+$/, "$1") + "/";
+}
+// TODO: Replace uses with `new URL(url).origin` when ie11 is no longer supported.
+function getOrigin(url) {
+    var matches = ("" + url).match(/(https?|file|ftp|(chrome|moz|safari-web)-extension):\/\/[^/]+/);
+    if (!matches) throw new Error("Origin not found");
+    return matches[0];
+}
+exports.getBundleURL = getBundleURLCached;
+exports.getBaseURL = getBaseURL;
+exports.getOrigin = getOrigin;
+
+},{}],"5ZPdk":[function(require,module,exports) {
+module.exports = require("ef9b259205789f7f").getBundleURL("2MSMO") + "bot.8f9f2519.jpg" + "?" + Date.now();
+
+},{"ef9b259205789f7f":"lgJ39"}],"cDRlN":[function(require,module,exports) {
+module.exports = require("8a8318b6b43e7696").getBundleURL("2MSMO") + "side1.5df036aa.jpg" + "?" + Date.now();
+
+},{"8a8318b6b43e7696":"lgJ39"}],"1HN2f":[function(require,module,exports) {
+module.exports = require("280cdbcd676c39d9").getBundleURL("2MSMO") + "side2.b981022d.jpg" + "?" + Date.now();
+
+},{"280cdbcd676c39d9":"lgJ39"}],"lBMtw":[function(require,module,exports) {
+module.exports = require("c1474af9c1c989ca").getBundleURL("2MSMO") + "side3.3aeffeae.jpg" + "?" + Date.now();
+
+},{"c1474af9c1c989ca":"lgJ39"}],"49ain":[function(require,module,exports) {
+module.exports = require("dd29f86a9f79632e").getBundleURL("2MSMO") + "side4.b73cb27f.jpg" + "?" + Date.now();
+
+},{"dd29f86a9f79632e":"lgJ39"}],"eqa9Y":[function(require,module,exports) {
+module.exports = require("6d0e8271c2f404b6").getBundleURL("2MSMO") + "dice_one.5dab205d.jpg" + "?" + Date.now();
+
+},{"6d0e8271c2f404b6":"lgJ39"}],"5n6ky":[function(require,module,exports) {
+module.exports = require("b08ba786d674b6eb").getBundleURL("2MSMO") + "dice_two.14114a2b.jpg" + "?" + Date.now();
+
+},{"b08ba786d674b6eb":"lgJ39"}],"kPYrI":[function(require,module,exports) {
+module.exports = require("454d1ec06e6efbbe").getBundleURL("2MSMO") + "dice_three.5a66aa56.jpg" + "?" + Date.now();
+
+},{"454d1ec06e6efbbe":"lgJ39"}],"4Etkx":[function(require,module,exports) {
+module.exports = require("43a06caa7fcb840").getBundleURL("2MSMO") + "dice_4.b6b98bd7.jpg" + "?" + Date.now();
+
+},{"43a06caa7fcb840":"lgJ39"}],"4D2qV":[function(require,module,exports) {
+module.exports = require("6dfa162152a6c38c").getBundleURL("2MSMO") + "dice_five.5648b119.jpg" + "?" + Date.now();
+
+},{"6dfa162152a6c38c":"lgJ39"}],"757Hp":[function(require,module,exports) {
+module.exports = require("dcf39afef78dd2a8").getBundleURL("2MSMO") + "dice_six.282a8381.jpg" + "?" + Date.now();
+
+},{"dcf39afef78dd2a8":"lgJ39"}]},["4FFYD","dV6cC"], "dV6cC", "parcelRequire6330")
 
 //# sourceMappingURL=index.e82f28a0.js.map
