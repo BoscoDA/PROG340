@@ -9,5 +9,19 @@
 </head>
 <body>
     <script src="./js/script.js" type="module"></script>
+    <script id="vertexShader" type="vertex">
+        void main()
+        {
+            vec3 newPosition = position + Math.random() + 10;
+            gl_Position = projectionMatrix * modelViewMatrix * vec4(newPosition, 1.0);
+        }
+    </script>
+
+    <script id="fragmentShader" type="fragment">
+        void main()
+        {
+            gl_FragColor = vec4(0.5,0.5,1.0,1.0);
+        }
+    </script>
 </body>
 </html>
