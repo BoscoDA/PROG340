@@ -1,9 +1,5 @@
 import * as THREE from "three";
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
-import side1 from '../img/side1.jpg';
-import side2 from '../img/side2.jpg';
-import side3 from '../img/side3.jpg';
-import side4 from '../img/side4.jpg';
 //Planet Textures from: https://www.solarsystemscope.com/textures/
 import earthSurface from '../img/2k_earth_daymap.jpg';
 import jupiterSurface from '../img/2k_jupiter.jpg';
@@ -30,20 +26,8 @@ const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
 const orbit = new OrbitControls(camera, renderer.domElement);
 
-camera.position.set(-10, 0, 25);
+camera.position.set(-75, 75, 215);
 orbit.update();
-
-//Backround Texture
-const cubeTextureLoader = new THREE.CubeTextureLoader();
-const cubeTexture = cubeTextureLoader.load([
-    side1,
-    side2,
-    side1,
-    side3,
-    side3,
-    side4,
-])
-scene.background = cubeTexture;
 
 const ambientLight = new THREE.AmbientLight(0x112233);
 scene.add(ambientLight);
@@ -60,8 +44,6 @@ const sunGeo = new THREE.SphereGeometry(12,40,40);
 const sunTexture = tLoader.load(sunSurface);
 const sunMat = new THREE.MeshBasicMaterial({
     map: sunTexture,
-    vertexShader: document.getElementById('vertexShader').textContent,
-    fragmentShader: document.getElementById('fragmentShader').textContent
 });
 const sun = new THREE.Mesh(sunGeo, sunMat);
 scene.add(sun);
@@ -217,6 +199,7 @@ scene.add(plutoObject);
 
 pluto.position.set(sun.position.x + 165, sun.position.y,sun.position.z);
 
+var alternate = 0;
 
 function animate(time) {
     //solar system roation
@@ -246,10 +229,58 @@ function animate(time) {
     neptuneObject.rotateY(0.00256);
     neptune.rotation.y += 0.04;
 
-    plutoObject.rotateY(0.001);
+    plutoObject.rotateY(0.01);
     pluto.rotation.y -= 0.04;
 
+    
+    if(time % 2 == 0){
+        for (let i = 101; i <= 4968; i += 12) {
 
+            if(alternate == 0)
+            {
+                if(sun.geometry.attributes.position.array[i] < 0){
+                    sun.geometry.attributes.position.array[i] += -0.75;
+                }
+                else{
+                    sun.geometry.attributes.position.array[i] += 0.75;
+                }
+
+                if(sun.geometry.attributes.position.array[i+2] < 0){
+                    sun.geometry.attributes.position.array[i+2] += -0.75;
+                }
+                else{
+                    sun.geometry.attributes.position.array[i+2] += 0.75;
+                }
+            }
+            else
+            {
+                if(sun.geometry.attributes.position.array[i] < 0){
+                    sun.geometry.attributes.position.array[i] += 0.75;
+                }
+                else{
+                    sun.geometry.attributes.position.array[i] += -0.75;
+                }
+
+                if(sun.geometry.attributes.position.array[i+2] < 0){
+                    sun.geometry.attributes.position.array[i+2] += 0.75;
+                }
+                else{
+                    sun.geometry.attributes.position.array[i+2] += -0.75;
+                }
+            }
+          }
+        
+        if(alternate == 0){
+            alternate++;
+        }
+        else{
+            alternate--;
+        }
+    }
+
+    
+
+    sun.geometry.attributes.position.needsUpdate = true;
     renderer.render(scene, camera);
 }
 renderer.setAnimationLoop(animate);
@@ -259,5 +290,5 @@ window.addEventListener("resize", function(){
     height = window.innerHeight;
     camera.aspect = width/height;
     camera.updateProjectionMatrix();
-    render.render(scene,camera);
+    renderer.render(scene,camera);
 })
