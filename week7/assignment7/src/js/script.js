@@ -13,6 +13,21 @@ import uranusSurface from '../img/2k_uranus.jpg';
 import venusSurface from '../img/2k_venus_surface.jpg';
 import sunSurface from '../img/2k_sun.jpg';
 
+//star model from: https://sketchfab.com/3d-models/gold-star-15adb339f45f4620a111c43e33388ba4
+import {GLTFLoader} from 'three/examples/jsm/loaders/GLTFLoader.js';
+const starURL = new URL('../assets/gold_star.glb',import.meta.url);
+
+//image open sources from: 
+//https://pixabay.com/photos/milky-way-stars-night-sky-2695569/
+//https://pixabay.com/photos/milky-way-nebula-galaxy-stars-74005/
+//https://pixabay.com/illustrations/universe-hole-space-fog-galaxy-4027609/
+import topImage from '../img/top.jpg';
+import botImage from '../img/bot.jpg';
+import side1 from '../img/side1.jpg';
+import side2 from '../img/side2.jpg';
+import side3 from '../img/side3.jpg';
+import side4 from '../img/side4.jpg';
+
 var height = window.innerHeight;
 var width = window.innerWidth;
 
@@ -26,7 +41,7 @@ const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
 const orbit = new OrbitControls(camera, renderer.domElement);
 
-camera.position.set(-75, 75, 215);
+camera.position.set(-98.923, 108.24, 63);
 orbit.update();
 
 const ambientLight = new THREE.AmbientLight(0x112233);
@@ -35,6 +50,18 @@ scene.add(ambientLight);
 const pointLight = new THREE.PointLight(0xFFFFFF,100,400,1);
 scene.add(pointLight);
 pointLight.castShadow = true;
+
+//Backround Texture
+const cubeTextureLoader = new THREE.CubeTextureLoader();
+const cubeTexture = cubeTextureLoader.load([
+    side1,
+    side2,
+    topImage,
+    botImage,
+    side3,
+    side4,
+])
+scene.background = cubeTexture;
 
 //SOLAR  SYSTEM THIng
 const tLoader = new THREE.TextureLoader();
@@ -75,7 +102,7 @@ const venusObject = new THREE.Object3D();
 venusObject.add(venus);
 scene.add(venusObject);
 
-venus.position.set(sun.position.x + 35, sun.position.y,sun.position.z);
+venus.position.set(sun.position.x + 40, sun.position.y,sun.position.z);
 
 //earth
 const surface = tLoader.load(earthSurface);
@@ -90,7 +117,7 @@ const earthObject = new THREE.Object3D();
 earthObject.add(earth);
 scene.add(earthObject);
 
-earth.position.set(sun.position.x + 50, sun.position.y,sun.position.z);
+earth.position.set(sun.position.x + 60, sun.position.y,sun.position.z);
 
 //moon
 const moonTexture = tLoader.load(moonSurface);
@@ -99,6 +126,15 @@ const moonMat = new THREE.MeshStandardMaterial({map: moonTexture});
 const moon = new THREE.Mesh(moonGeo,moonMat);
 moon.receiveShadow = true;
 
+const moonObject = new THREE.Object3D();
+moonObject.add(moon);
+earth.add(moonObject);
+
+const moonLight = new THREE.PointLight(0xFFFFFF,50,10,2);
+moonLight.castShadow = true;
+moon.add(moonLight);
+
+moon.position.set(10,sun.position.y, sun.position.z);
 
 //mars
 const marsGeo = new THREE.SphereGeometry(3,40,40);
@@ -112,7 +148,7 @@ const marsObject = new THREE.Object3D();
 marsObject.add(mars);
 scene.add(marsObject);
 
-mars.position.set(sun.position.x + 65, sun.position.y,sun.position.z);
+mars.position.set(sun.position.x + 80, sun.position.y,sun.position.z);
 
 //jupiter
 const jupiterGeo = new THREE.SphereGeometry(9,40,40);
@@ -126,7 +162,7 @@ const jupiterObject = new THREE.Object3D();
 jupiterObject.add(jupiter);
 scene.add(jupiterObject);
 
-jupiter.position.set(sun.position.x + 80, sun.position.y,sun.position.z);
+jupiter.position.set(sun.position.x + 105, sun.position.y,sun.position.z);
 
 //saturn
 const saturnGeo = new THREE.SphereGeometry(8,40,40);
@@ -136,28 +172,36 @@ const saturn = new THREE.Mesh(saturnGeo,saturnMat);
 saturn.receiveShadow = true;
 //tilt 27 degree
 saturn.rotation.z = 0.471239;
-// const ringTexture = tLoader.load(saturnRingSurface);
-// const ring1Geo = new THREE.RingGeometry(10,11,30,30);
-// const ring1Mat = new THREE.MeshBasicMaterial({map: ringTexture});
-// const ring1 = new THREE.Mesh(ring1Geo, ring1Mat)
 
-// const ring2Geo = new THREE.RingGeometry(12,13,30,30);
-// const ring2Mat = new THREE.MeshBasicMaterial({map: ringTexture});
-// const ring2 = new THREE.Mesh(ring2Geo, ring2Mat)
+//Learned TorusGeo from: https://threejs.org/docs/#api/en/geometries/TorusGeometry
+const ringTexture = tLoader.load(saturnRingSurface);
+const ring1Geo = new THREE.TorusGeometry(10,1,2,200,6.2);
+const ring1Mat = new THREE.MeshBasicMaterial({map: ringTexture});
+const ring1 = new THREE.Mesh(ring1Geo, ring1Mat);
 
-// const ring3Geo = new THREE.RingGeometry(14,15,30,30);
-// const ring3Mat = new THREE.MeshBasicMaterial({map: ringTexture});
-// const ring3 = new THREE.Mesh(ring3Geo, ring3Mat)
+const ring2Geo = new THREE.TorusGeometry(13,1,2,200,6.2);
+const ring2Mat = new THREE.MeshBasicMaterial({map: ringTexture});
+const ring2 = new THREE.Mesh(ring2Geo, ring2Mat)
 
-// saturn.add(ring1);
-// saturn.add(ring2);
-// saturn.add(ring3);
+const ring3Geo = new THREE.TorusGeometry(16,1,2,200,6.2);
+const ring3Mat = new THREE.MeshBasicMaterial({map: ringTexture});
+const ring3 = new THREE.Mesh(ring3Geo, ring3Mat)
 
 const saturnObject = new THREE.Object3D();
 saturnObject.add(saturn);
 scene.add(saturnObject);
+saturnObject.add(ring1);
+saturnObject.add(ring2);
+saturnObject.add(ring3);
 
-saturn.position.set(sun.position.x + 108, sun.position.y,sun.position.z);
+ring1.rotation.x = Math.PI/2;
+ring2.rotation.x = Math.PI/2;
+ring3.rotation.x = Math.PI/2;
+
+saturn.position.set(sun.position.x + 138, sun.position.y,sun.position.z);
+ring1.position.set(sun.position.x + 138, sun.position.y,sun.position.z);
+ring2.position.set(sun.position.x + 138, sun.position.y,sun.position.z);
+ring3.position.set(sun.position.x + 138, sun.position.y,sun.position.z);
 
 //uranus
 const uranusGeo = new THREE.SphereGeometry(7,40,40);
@@ -171,7 +215,7 @@ const uranusObject = new THREE.Object3D();
 uranusObject.add(uranus);
 scene.add(uranusObject);
 
-uranus.position.set(sun.position.x +  132, sun.position.y,sun.position.z);
+uranus.position.set(sun.position.x +  170, sun.position.y,sun.position.z);
 
 //neptune
 const neptuneGeo = new THREE.SphereGeometry(6,40,40);
@@ -185,7 +229,7 @@ const neptuneObject = new THREE.Object3D();
 neptuneObject.add(neptune);
 scene.add(neptuneObject);
 
-neptune.position.set(sun.position.x + 150, sun.position.y,sun.position.z);
+neptune.position.set(sun.position.x + 190, sun.position.y,sun.position.z);
 
 //pluto
 const plutoGeo = new THREE.SphereGeometry(2,40,40);
@@ -197,7 +241,23 @@ const plutoObject = new THREE.Object3D();
 plutoObject.add(pluto);
 scene.add(plutoObject);
 
-pluto.position.set(sun.position.x + 165, sun.position.y,sun.position.z);
+pluto.position.set(sun.position.x + 210, sun.position.y,sun.position.z);
+
+// star model
+const assetLoader = new GLTFLoader();
+assetLoader.load(
+    starURL.href,
+    function(gltf){
+        const model = gltf.scene;
+        scene.add(model);
+        model.position.set(0,20,0);
+        model.scale.set(10,10,10)
+    },
+    undefined,
+    function(error){
+        console.error(error);
+    }
+);
 
 var alternate = 0;
 
@@ -205,82 +265,82 @@ function animate(time) {
     //solar system roation
     sun.rotateY(0.005);
     
-    mercObject.rotateY(0.0078954)
-    merc.rotation.y += 0.04;
+    mercObject.rotateY(0.008)
+    merc.rotation.y += 0.004;
 
-    venusObject.rotateY(0.008345);
-    venus.rotation.y -= 0.04;
+    venusObject.rotateY(0.005);
+    venus.rotation.y -= 0.007;
 
-    earthObject.rotateY(0.007654);
+    earthObject.rotateY(0.002);
     earth.rotation.y += 0.005;
 
-    marsObject.rotateY(0.006345);
-    mars.rotation.y += 0.04;
+    moonObject.rotateY(0.00125)
+    moon.rotateY(0.006);
 
-    jupiterObject.rotateY(0.0059876);
-    jupiter.rotation.y += 0.04;
+    marsObject.rotateY(0.0009);
+    mars.rotation.y += 0.004;
 
-    saturnObject.rotateY(0.004645);
-    saturn.rotation.y += 0.04;
+    jupiterObject.rotateY(0.00065);
+    jupiter.rotation.y += 0.002;
 
-    uranusObject.rotateY(0.003234);
-    uranus.rotation.x += 0.04;
+    saturnObject.rotateY(0.0004);
+    saturn.rotation.y += 0.008;
 
-    neptuneObject.rotateY(0.00256);
-    neptune.rotation.y += 0.04;
+    uranusObject.rotateY(0.00025);
+    uranus.rotation.x += 0.005;
 
-    plutoObject.rotateY(0.01);
-    pluto.rotation.y -= 0.04;
+    neptuneObject.rotateY(0.0001);
+    neptune.rotation.y += 0.009;
 
-    
-    if(time % 2 == 0){
-        for (let i = 101; i <= 4968; i += 12) {
+    plutoObject.rotateY(0.00007);
+    pluto.rotation.y -= 0.003;
 
-            if(alternate == 0)
-            {
-                if(sun.geometry.attributes.position.array[i] < 0){
-                    sun.geometry.attributes.position.array[i] += -0.75;
-                }
-                else{
-                    sun.geometry.attributes.position.array[i] += 0.75;
-                }
-
-                if(sun.geometry.attributes.position.array[i+2] < 0){
-                    sun.geometry.attributes.position.array[i+2] += -0.75;
-                }
-                else{
-                    sun.geometry.attributes.position.array[i+2] += 0.75;
-                }
+    for (let i = 101; i <= 4968; i += 12) {
+        if(alternate == 0)
+        {
+            if(sun.geometry.attributes.position.array[i] < 0){
+                sun.geometry.attributes.position.array[i] += -0.75;
             }
-            else
-            {
-                if(sun.geometry.attributes.position.array[i] < 0){
-                    sun.geometry.attributes.position.array[i] += 0.75;
-                }
-                else{
-                    sun.geometry.attributes.position.array[i] += -0.75;
-                }
-
-                if(sun.geometry.attributes.position.array[i+2] < 0){
-                    sun.geometry.attributes.position.array[i+2] += 0.75;
-                }
-                else{
-                    sun.geometry.attributes.position.array[i+2] += -0.75;
-                }
+            else{
+                sun.geometry.attributes.position.array[i] += 0.75;
             }
-          }
+
+            if(sun.geometry.attributes.position.array[i+2] < 0){
+                sun.geometry.attributes.position.array[i+2] += -0.75;
+            }
+            else{
+                sun.geometry.attributes.position.array[i+2] += 0.75;
+            }
+        }
+        else
+        {
+            if(sun.geometry.attributes.position.array[i] < 0){
+                sun.geometry.attributes.position.array[i] += 0.75;
+            }
+            else{
+                sun.geometry.attributes.position.array[i] += -0.75;
+            }
+
+            if(sun.geometry.attributes.position.array[i+2] < 0){
+                sun.geometry.attributes.position.array[i+2] += 0.75;
+            }
+            else{
+                sun.geometry.attributes.position.array[i+2] += -0.75;
+            }
+        }
+    }
         
-        if(alternate == 0){
-            alternate++;
-        }
-        else{
-            alternate--;
-        }
+    if(alternate == 0){
+        alternate++;
+    }
+    else{
+        alternate--;
     }
 
     
 
     sun.geometry.attributes.position.needsUpdate = true;
+    console.log(camera.position);
     renderer.render(scene, camera);
 }
 renderer.setAnimationLoop(animate);
